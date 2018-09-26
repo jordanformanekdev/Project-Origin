@@ -13,6 +13,7 @@ import burgerBuilderReducer from "./store/reducers/burgerBuilder";
 import orderReducer from "./store/reducers/order";
 import authReducer from "./store/reducers/auth";
 import { watchAuth, watchBurgerBuilder, watchOrder } from "./store/sagas";
+import 'babel-polyfill';
 
 const composeEnhancers =
   process.env.NODE_ENV === "development"
