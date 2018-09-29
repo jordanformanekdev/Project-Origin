@@ -29,7 +29,7 @@ class App extends Component {
     let routes = (
       <Switch>
         <Route path="/auth" component={asyncAuth} />
-        <Route path="/" exact component={BurgerBuilder} />
+        <Route path="/" exact component={asyncAuth} />
         <Redirect to="/" />
       </Switch>
     );
