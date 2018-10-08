@@ -24,7 +24,7 @@ class Auth extends Component {
                     isEmail: true
                 },
                 valid: false,
-                touched: false
+                touched: false,
             },
             password: {
                 elementType: 'input',
@@ -38,10 +38,25 @@ class Auth extends Component {
                     minLength: 6
                 },
                 valid: false,
-                touched: false
+                touched: false,
+            },
+            passwordConfirm: {
+                elementType: 'input',
+                elementConfig: {
+                    type: 'password',
+                    placeholder: 'Confirm Password'
+                },
+                value: '',
+                validation: {
+                    required: true,
+                    minLength: 6
+                },
+                valid: false,
+                touched: false,
             }
         },
-        isSignup: true
+        isSignup: false,
+        error: null
     }
 
     componentDidMount () {
@@ -51,19 +66,36 @@ class Auth extends Component {
     }
 
     inputChangedHandler = ( event, controlName ) => {
+
         const updatedControls = updateObject( this.state.controls, {
             [controlName]: updateObject( this.state.controls[controlName], {
                 value: event.target.value,
-                valid: checkValidity( event.target.value, this.state.controls[controlName].validation ),
-                touched: true
+                valid: checkValidity( event.target.value, this.state, controlName ),
+                touched: true,
+                confirmed: this.state.controls['password'] === this.state.controls['passwordConfirm'] ? true : false
             } )
         } );
         this.setState( { controls: updatedControls } );
+
     }
 
     submitHandler = ( event ) => {
         event.preventDefault();
-        this.props.onAuth( this.state.controls.email.value, this.state.controls.password.value, this.state.isSignup );
+
+        if( !this.state.isSignup) {
+
+          this.props.onAuth( this.state.controls.email.value, this.state.controls.password.value, this.state.isSignup );
+
+        } else if( this.state.isSignup && this.state.controls.password.value === this.state.controls.passwordConfirm.value ) {
+
+          this.props.onAuth( this.state.controls.email.value, this.state.controls.password.value, this.state.isSignup );
+
+        } else {
+          this.setState( prevState => {
+            return { error: "Passwords do not match"}
+          });
+        }
+
     }
 
     switchAuthModeHandler = () => {
@@ -75,10 +107,20 @@ class Auth extends Component {
     render () {
         const formElementsArray = [];
         for ( let key in this.state.controls ) {
+          if(this.state.isSignup) {
             formElementsArray.push( {
                 id: key,
                 config: this.state.controls[key]
             } );
+          } else {
+            if(key !== 'passwordConfirm') {
+              formElementsArray.push( {
+                  id: key,
+                  config: this.state.controls[key]
+              } );
+            }
+          }
+
         }
 
         let form = formElementsArray.map( formElement => (
@@ -105,6 +147,15 @@ class Auth extends Component {
             );
         }
 
+        if ( this.state.isSignup ) {
+          if ( this.state.controls.passwordConfirm.touched && this.state.controls.password.value !== this.state.controls.passwordConfirm.value ) {
+            errorMessage = (
+                <p>{"Passwords Must Match"}</p>
+            );
+          }
+
+        }
+
         let authRedirect = null;
         if ( this.props.isAuthenticated ) {
             authRedirect = <Redirect to={this.props.authRedirectPath} />
@@ -116,11 +167,11 @@ class Auth extends Component {
                 {errorMessage}
                 <form onSubmit={this.submitHandler}>
                     {form}
-                    <Button btnType="Success">SUBMIT</Button>
+                    <Button btnType="Success">{this.state.isSignup ? "Sign Up" : "Sign In"}</Button>
                 </form>
                 <Button
                     clicked={this.switchAuthModeHandler}
-                    btnType="Danger">SWITCH TO {this.state.isSignup ? 'SIGNIN' : 'SIGNUP'}</Button>
+                    btnType="Danger"> {this.state.isSignup ? "Already have an Account?" : "Don't have an Account?"}</Button>
             </div>
         );
     }
