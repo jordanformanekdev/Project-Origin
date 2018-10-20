@@ -5,31 +5,31 @@ export const updateObject = (oldObject, updatedProperties) => {
     };
 };
 
-export const checkValidity = ( value, state, currentControl ) => {
+export const checkValidity = ( value, rules ) => {
     let isValid = true;
-        
-    if ( !state.controls[currentControl].validation ) {
+
+    if ( !rules ) {
         return true;
     }
 
-    if ( state.controls[currentControl].validation.required ) {
+    if ( rules.required ) {
         isValid = value.trim() !== '' && isValid;
     }
 
-    if ( state.controls[currentControl].validation.minLength ) {
-        isValid = value.length >= state.controls[currentControl].validation.minLength && isValid
+    if ( rules.minLength ) {
+        isValid = value.length >= rules.minLength && isValid
     }
 
-    if ( state.controls[currentControl].validation.maxLength ) {
-        isValid = value.length <= state.controls[currentControl].validation.maxLength && isValid
+    if ( rules.maxLength ) {
+        isValid = value.length <= rules.maxLength && isValid
     }
 
-    if ( state.controls[currentControl].validation.isEmail ) {
+    if ( rules.isEmail ) {
         const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
         isValid = pattern.test( value ) && isValid
     }
 
-    if ( state.controls[currentControl].validation.isNumeric ) {
+    if ( rules.isNumeric ) {
         const pattern = /^\d+$/;
         isValid = pattern.test( value ) && isValid
     }
