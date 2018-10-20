@@ -1,9 +1,4 @@
 .DS_Store
 node_modules/
-<<<<<<< Updated upstream
 dist/
 build/
-=======
-build/
-dist/
->>>>>>> Stashed changes
