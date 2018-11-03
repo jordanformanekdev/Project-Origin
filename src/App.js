@@ -9,7 +9,11 @@ import Logout from './containers/Auth/Logout/Logout';
 import * as actions from './store/actions/index';
 
 const asyncCheckout = asyncComponent(() => {
-  return import('./containers/Checkout/Checkout');
+    return import('./containers/Checkout/Checkout');
+});
+
+const asyncProfile = asyncComponent(() => {
+  return import('./containers/Profile/Profile');
 });
 
 const asyncOrders = asyncComponent(() => {
@@ -38,6 +42,7 @@ class App extends Component {
       routes = (
         <Switch>
           <Route path="/checkout" component={asyncCheckout} />
+          <Route path="/profile" component={asyncProfile} />
           <Route path="/orders" component={asyncOrders} />
           <Route path="/logout" component={Logout} />
           <Route path="/auth" component={asyncAuth} />
