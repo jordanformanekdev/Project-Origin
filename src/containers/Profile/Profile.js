@@ -17,8 +17,6 @@ class Profile extends Component {
 
     render () {
 
-        console.log("MADE IT");
-
         let summary = (
             <div>
                 <Route

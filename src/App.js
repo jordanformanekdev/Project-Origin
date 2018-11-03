@@ -9,12 +9,10 @@ import Logout from './containers/Auth/Logout/Logout';
 import * as actions from './store/actions/index';
 
 const asyncCheckout = asyncComponent(() => {
-  console.log("HERE");
-  return import('./containers/Checkout/Checkout');
+    return import('./containers/Checkout/Checkout');
 });
 
 const asyncProfile = asyncComponent(() => {
-
   return import('./containers/Profile/Profile');
 });
 
@@ -52,7 +50,6 @@ class App extends Component {
           <Redirect to="/" />
         </Switch>
       );
-      console.log(routes);
     }
 
     return (
