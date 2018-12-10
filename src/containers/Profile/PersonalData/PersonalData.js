@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import classes from './PersonalData.css';
-import axios from '../../../axios-orders';
+import axios from '../../../axios/axios-orders';
+import axiosProfile from '../../../axios/axios-profile';
 import Input from '../../../components/UI/Input/Input';
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler'
 import * as actions from '../../../store/actions/index';
@@ -12,7 +13,7 @@ import { updateObject, checkValidity } from '../../../shared/utility';
 
 class PersonalData extends Component {
     state = {
-        orderForm: {
+        profileForm: {
             name: {
                 elementType: 'input',
                 elementConfig: {
@@ -98,30 +99,30 @@ class PersonalData extends Component {
         formIsValid: false
     }
 
-    //Handles order submission from
-    orderHandler = ( event ) => {
+    //Handles profile submission from
+    profileHandler = ( event ) => {
 
         //Prevents action from being submitted twice
         event.preventDefault();
 
-        //Variable used to capture current state of orderForm
+        //Variable used to capture current state of profileForm
         const formData = {};
 
-        //Populate form data with orderForm data from state
-        for (let formElementIdentifier in this.state.orderForm) {
-            formData[formElementIdentifier] = this.state.orderForm[formElementIdentifier].value;
+        //Populate form data with profileForm data from state
+        for (let formElementIdentifier in this.state.profileForm) {
+            formData[formElementIdentifier] = this.state.profileForm[formElementIdentifier].value;
         }
 
-        //Construct json map of order data
-        const order = {
+        //Construct json map of profile data
+        const profile = {
             ingredients: this.props.ings,
             price: this.props.price,
-            orderData: formData,
+            personalData: formData,
             userId: this.props.userId
         }
 
         //Sends to mapDispatchToProps
-        this.props.onOrderBurger(order, this.props.token);
+        this.props.onprofileBurger(profile, this.props.token);
 
     }
 
@@ -129,27 +130,27 @@ class PersonalData extends Component {
     inputChangedHandler = (event, inputIdentifier) => {
 
         //Variable used to update state of element when input changes and is verified
-        const updatedFormElement = updateObject(this.state.orderForm[inputIdentifier], {
+        const updatedFormElement = updateObject(this.state.profileForm[inputIdentifier], {
             value: event.target.value,
-            valid: checkValidity(event.target.value, this.state.orderForm[inputIdentifier].validation),
+            valid: checkValidity(event.target.value, this.state.profileForm[inputIdentifier].validation),
             touched: true
         });
 
         //Variable used to update state of form when input changes
-        const updatedOrderForm = updateObject(this.state.orderForm, {
+        const updatedprofileForm = updateObject(this.state.profileForm, {
             [inputIdentifier]: updatedFormElement
         });
 
         //Variable used to detect form validity
         let formIsValid = true;
 
-        //Loop through state of orderForm to check validity placholder
-        for (let inputIdentifier in updatedOrderForm) {
-            formIsValid = updatedOrderForm[inputIdentifier].valid && formIsValid;
+        //Loop through state of profileForm to check validity placholder
+        for (let inputIdentifier in updatedprofileForm) {
+            formIsValid = updatedprofileForm[inputIdentifier].valid && formIsValid;
         }
 
         //Alter state with the updated form and it's validity
-        this.setState({orderForm: updatedOrderForm, formIsValid: formIsValid});
+        this.setState({profileForm: updatedprofileForm, formIsValid: formIsValid});
     }
 
     render () {
@@ -158,20 +159,20 @@ class PersonalData extends Component {
         const formElementsArray = [];
 
         // Create formElementsArray according to the
-        // orderForm structure provided in state
-        for (let key in this.state.orderForm) {
+        // profileForm structure provided in state
+        for (let key in this.state.profileForm) {
             //Add key and input configs
             formElementsArray.push({
                 id: key,
-                config: this.state.orderForm[key]
+                config: this.state.profileForm[key]
             });
         }
 
         //Create form to render
         let form = (
-            //Submits to orderHandler where it will be dispatched
-            <form onSubmit={this.orderHandler}>
-                 {/* Event Submitted to orderHandler */}
+            //Submits to profileHandler where it will be dispatched
+            <form onSubmit={this.profileHandler}>
+                 {/* Event Submitted to profileHandler */}
                 {formElementsArray.map(formElement => (
                     //Input Component [src/components/UI/Input]
                     <Input
@@ -186,7 +187,7 @@ class PersonalData extends Component {
                 ))}
 
                 {/* Button Component [src/components/UI/Button] (submits Input event) */}
-                <Button btnType="Success" disabled={!this.state.formIsValid}>ORDER</Button>
+                <Button btnType="Success" disabled={!this.state.formIsValid}>SUBMIT</Button>
             </form>
         );
 
@@ -211,17 +212,17 @@ const mapStateToProps = state => {
     return {
         ings: state.burgerBuilder.ingredients,
         price: state.burgerBuilder.totalPrice,
-        loading: state.order.loading,
+        loading: state.profile.loading,
         token: state.auth.token,
         userId: state.auth.userId
     }
 };
 
-//Submits order to action purchasBurger
+//Submits profile to action purchasBurger
 const mapDispatchToProps = dispatch => {
     return {
-        onOrderBurger: (orderData, token) => dispatch(actions.purchaseBurger(orderData, token))
+        onprofileBurger: (personalData, token) => dispatch(actions.purchaseBurger(personalData, token))
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(PersonalData, axios));
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(PersonalData, axiosProfile));
