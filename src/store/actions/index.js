@@ -17,6 +17,17 @@ export {
     fetchOrdersFail
 } from './order';
 export {
+    submitPersonalData,
+    submitPersonalDataInit,
+    fetchPersonalData,
+    submitPersonalDataStart,
+    submitPersonalDataFail,
+    submitPersonalDataSuccess,
+    fetchPersonalDataSuccess,
+    fetchPersonalDataStart,
+    fetchPersonalDataFail
+} from './personalData';
+export {
     auth,
     logout,
     setAuthRedirectPath,

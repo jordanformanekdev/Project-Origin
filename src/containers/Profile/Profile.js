@@ -19,9 +19,7 @@ class Profile extends Component {
 
         let summary = (
             <div>
-                <Route
-                    path={this.props.match.path + '/personal-data'}
-                    component={PersonalData} />
+                <PersonalData />
             </div>
         );
 

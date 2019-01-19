@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import classes from './PersonalData.css';
-import axios from '../../../axios-orders';
+import axios from '../../../axios-submission';
 import Input from '../../../components/UI/Input/Input';
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler'
 import * as actions from '../../../store/actions/index';
@@ -12,12 +12,12 @@ import { updateObject, checkValidity } from '../../../shared/utility';
 
 class PersonalData extends Component {
     state = {
-        orderForm: {
-            name: {
+        personalData: {
+            firstName: {
                 elementType: 'input',
                 elementConfig: {
                     type: 'text',
-                    placeholder: 'Your Name'
+                    placeholder: 'First Name'
                 },
                 value: '',
                 validation: {
@@ -26,11 +26,11 @@ class PersonalData extends Component {
                 valid: false,
                 touched: false
             },
-            street: {
+            middleName: {
                 elementType: 'input',
                 elementConfig: {
                     type: 'text',
-                    placeholder: 'Street'
+                    placeholder: 'Middle'
                 },
                 value: '',
                 validation: {
@@ -39,27 +39,11 @@ class PersonalData extends Component {
                 valid: false,
                 touched: false
             },
-            zipCode: {
+            lastName: {
                 elementType: 'input',
                 elementConfig: {
                     type: 'text',
-                    placeholder: 'ZIP Code'
-                },
-                value: '',
-                validation: {
-                    required: true,
-                    minLength: 5,
-                    maxLength: 5,
-                    isNumeric: true
-                },
-                valid: false,
-                touched: false
-            },
-            country: {
-                elementType: 'input',
-                elementConfig: {
-                    type: 'text',
-                    placeholder: 'Country'
+                    placeholder: 'Last Name'
                 },
                 value: '',
                 validation: {
@@ -68,60 +52,32 @@ class PersonalData extends Component {
                 valid: false,
                 touched: false
             },
-            email: {
-                elementType: 'input',
-                elementConfig: {
-                    type: 'email',
-                    placeholder: 'Your E-Mail'
-                },
-                value: '',
-                validation: {
-                    required: true,
-                    isEmail: true
-                },
-                valid: false,
-                touched: false
-            },
-            deliveryMethod: {
-                elementType: 'select',
-                elementConfig: {
-                    options: [
-                        {value: 'fastest', displayValue: 'Fastest'},
-                        {value: 'cheapest', displayValue: 'Cheapest'}
-                    ]
-                },
-                value: 'fastest',
-                validation: {},
-                valid: true
-            }
         },
         formIsValid: false
     }
 
-    //Handles order submission from
-    orderHandler = ( event ) => {
+    //Handles personalData submission from
+    personalDataHandler = ( event ) => {
 
         //Prevents action from being submitted twice
         event.preventDefault();
 
-        //Variable used to capture current state of orderForm
+        //Variable used to capture current state of personalData
         const formData = {};
 
-        //Populate form data with orderForm data from state
-        for (let formElementIdentifier in this.state.orderForm) {
-            formData[formElementIdentifier] = this.state.orderForm[formElementIdentifier].value;
+        //Populate form data with personalData input from state
+        for (let formElementIdentifier in this.state.personalData) {
+            formData[formElementIdentifier] = this.state.personalData[formElementIdentifier].value;
         }
 
-        //Construct json map of order data
-        const order = {
-            ingredients: this.props.ings,
-            price: this.props.price,
-            orderData: formData,
+        //Construct json map of personal data
+        const personalData = {
+            personalData: formData,
             userId: this.props.userId
         }
 
         //Sends to mapDispatchToProps
-        this.props.onOrderBurger(order, this.props.token);
+        this.props.onPersonalDataSubmit(personalData, this.props.token);
 
     }
 
@@ -129,27 +85,27 @@ class PersonalData extends Component {
     inputChangedHandler = (event, inputIdentifier) => {
 
         //Variable used to update state of element when input changes and is verified
-        const updatedFormElement = updateObject(this.state.orderForm[inputIdentifier], {
+        const updatedFormElement = updateObject(this.state.personalData[inputIdentifier], {
             value: event.target.value,
-            valid: checkValidity(event.target.value, this.state.orderForm[inputIdentifier].validation),
+            valid: checkValidity(event.target.value, this.state.personalData[inputIdentifier].validation),
             touched: true
         });
 
         //Variable used to update state of form when input changes
-        const updatedOrderForm = updateObject(this.state.orderForm, {
+        const updatedpersonalData = updateObject(this.state.personalData, {
             [inputIdentifier]: updatedFormElement
         });
 
         //Variable used to detect form validity
         let formIsValid = true;
 
-        //Loop through state of orderForm to check validity placholder
-        for (let inputIdentifier in updatedOrderForm) {
-            formIsValid = updatedOrderForm[inputIdentifier].valid && formIsValid;
+        //Loop through state of personalData to check validity placholder
+        for (let inputIdentifier in updatedpersonalData) {
+            formIsValid = updatedpersonalData[inputIdentifier].valid && formIsValid;
         }
 
         //Alter state with the updated form and it's validity
-        this.setState({orderForm: updatedOrderForm, formIsValid: formIsValid});
+        this.setState({personalData: updatedpersonalData, formIsValid: formIsValid});
     }
 
     render () {
@@ -158,20 +114,20 @@ class PersonalData extends Component {
         const formElementsArray = [];
 
         // Create formElementsArray according to the
-        // orderForm structure provided in state
-        for (let key in this.state.orderForm) {
+        // personalData structure provided in state
+        for (let key in this.state.personalData) {
             //Add key and input configs
             formElementsArray.push({
                 id: key,
-                config: this.state.orderForm[key]
+                config: this.state.personalData[key]
             });
         }
 
         //Create form to render
         let form = (
-            //Submits to orderHandler where it will be dispatched
-            <form onSubmit={this.orderHandler}>
-                 {/* Event Submitted to orderHandler */}
+            //Submits to pesonalDataHandler where it will be dispatched
+            <form onSubmit={this.personalDataHandler}>
+                 {/* Event Submitted to personalDataHandler */}
                 {formElementsArray.map(formElement => (
                     //Input Component [src/components/UI/Input]
                     <Input
@@ -186,7 +142,8 @@ class PersonalData extends Component {
                 ))}
 
                 {/* Button Component [src/components/UI/Button] (submits Input event) */}
-                <Button btnType="Success" disabled={!this.state.formIsValid}>ORDER</Button>
+
+                <Button btnType="Success" disabled={!this.state.formIsValid}>SUBMIT</Button>
             </form>
         );
 
@@ -198,7 +155,7 @@ class PersonalData extends Component {
         return (
             //JSX that renders form
             <div className={classes.PersonalData}>
-                <h4>Enter your Personal Data</h4>
+                <h4>Who are you?</h4>
                 {/* form object as created above */}
                 {form}
             </div>
@@ -209,18 +166,16 @@ class PersonalData extends Component {
 //Pieces of state from other components
 const mapStateToProps = state => {
     return {
-        ings: state.burgerBuilder.ingredients,
-        price: state.burgerBuilder.totalPrice,
-        loading: state.order.loading,
+        loading: state.personalData.loading,
         token: state.auth.token,
         userId: state.auth.userId
     }
 };
 
-//Submits order to action purchasBurger
+//Submits personalData to action purchasBurger
 const mapDispatchToProps = dispatch => {
     return {
-        onOrderBurger: (orderData, token) => dispatch(actions.purchaseBurger(orderData, token))
+        onPersonalDataSubmit: (personalData, token) => dispatch(actions.submitPersonalData(personalData, token))
     };
 };
 

@@ -9,6 +9,7 @@ import {
 } from "./auth";
 import { initIngredientsSaga } from "./burgerBuilder";
 import { purchaseBurgerSaga, fetchOrdersSaga } from "./order";
+import { submitPersonalDataSaga, fetchPersonalDataSaga } from "./personalData";
 
 export function* watchAuth() {
   yield all([
@@ -26,4 +27,9 @@ export function* watchBurgerBuilder() {
 export function* watchOrder() {
   yield takeLatest(actionTypes.PURCHASE_BURGER, purchaseBurgerSaga);
   yield takeEvery(actionTypes.FETCH_ORDERS, fetchOrdersSaga);
+}
+
+export function* watchPersonalData() {
+  yield takeLatest(actionTypes.SUBMIT_PERSONAL_DATA,submitPersonalDataSaga);
+  yield takeEvery(actionTypes.FETCH_PERSONAL_DATA, fetchPersonalDataSaga);
 }

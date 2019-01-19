@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Aux from '../Aux/Aux';
 import classes from './Layout.css';
 import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
+import SideNav from '../../components/Navigation/SideNav/SideNav';
 import SideDrawer from '../../components/Navigation/SideDrawer/SideDrawer';
 
 class Layout extends Component {
@@ -27,11 +28,13 @@ class Layout extends Component {
                 <Toolbar
                     isAuth={this.props.isAuthenticated}
                     drawerToggleClicked={this.sideDrawerToggleHandler} />
+                <SideNav
+                    isAuth={this.props.isAuthenticated} />
                 <SideDrawer
                     isAuth={this.props.isAuthenticated}
                     open={this.state.showSideDrawer}
                     closed={this.sideDrawerClosedHandler} />
-                <main className={classes.Content}>
+                <main className={(this.props.isAuthenticated ? classes.Content : classes.UnAuthContent)}>
                     {this.props.children}
                 </main>
             </Aux>

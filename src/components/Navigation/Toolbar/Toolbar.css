@@ -4,9 +4,8 @@
     position: fixed;
     top: 0;
     left: 0;
-    background-color: #FFFFFF;
-    border-bottom: 1px solid #ccc;
-    box-shadow: 5px 1px #ccc;
+    background: rgb(13,2,8);
+    background: linear-gradient(180deg, rgba(13,2,8,1) 92%, rgba(0,59,0,1) 100%);
     display: flex;
     justify-content: space-between;
     align-items: center;

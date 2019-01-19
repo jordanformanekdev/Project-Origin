@@ -1,0 +1,23 @@
+.SideNavItem {
+    margin: 0;
+    display: flex;
+    height: 100%;
+    width: auto;
+    align-items: center;
+}
+
+.SideNavItem a {
+    color: #008F11;
+    height: 100%;
+    padding: 0px 10px;
+    border-bottom: 4px solid transparent;
+    text-decoration: none;
+}
+
+.SideNavItem a:hover,
+.SideNavItem a:active,
+.SideNavItem a.active {
+
+    color: #00FF41;
+    font-weight: 400;
+}

@@ -1,0 +1,28 @@
+.SideNav {
+    height: 100%;
+    width: 300px;
+    position: fixed;
+    top: 65px;
+    left: 0;
+    background: rgb(0,59,0);
+    background: linear-gradient(90deg, rgba(0,59,0,1) 0%, rgba(13,2,8,1) 1%, rgba(13,2,8,1) 99%, rgba(0,59,0,1) 100%);
+    display: block;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    z-index: 90;
+}
+
+.SideNav nav {
+    height: 100%;
+}
+
+.Hide {
+  display: none;
+}
+
+@media (max-width: 499px) {
+    .DesktopOnly {
+        display: none;
+    }
+}

@@ -11,8 +11,9 @@ import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
 import burgerBuilderReducer from "./store/reducers/burgerBuilder";
 import orderReducer from "./store/reducers/order";
+import personalDataReducer from "./store/reducers/personalData";
 import authReducer from "./store/reducers/auth";
-import { watchAuth, watchBurgerBuilder, watchOrder } from "./store/sagas";
+import { watchAuth, watchBurgerBuilder, watchOrder, watchPersonalData } from "./store/sagas";
 
 const composeEnhancers =
   process.env.NODE_ENV === "development"
@@ -22,6 +23,7 @@ const composeEnhancers =
 const rootReducer = combineReducers({
   burgerBuilder: burgerBuilderReducer,
   order: orderReducer,
+  personalData: personalDataReducer,
   auth: authReducer
 });
 
@@ -35,6 +37,7 @@ const store = createStore(
 sagaMiddleware.run(watchAuth);
 sagaMiddleware.run(watchBurgerBuilder);
 sagaMiddleware.run(watchOrder);
+sagaMiddleware.run(watchPersonalData);
 
 const app = (
   <Provider store={store}>
