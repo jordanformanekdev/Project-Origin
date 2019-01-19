@@ -3,8 +3,12 @@ import React from 'react';
 import classes from './Order.css';
 
 const order = ( props ) => {
+
+    {/* Ingredients an order contains */}
+
     const ingredients = [];
 
+    {/* Place ingredients in array from props */}
     for ( let ingredientName in props.ingredients ) {
         ingredients.push(
             {
@@ -14,8 +18,9 @@ const order = ( props ) => {
         );
     }
 
+    {/* Map ingredients to JSX */}
     const ingredientOutput = ingredients.map(ig => {
-        return <span 
+        return <span
             style={{
                 textTransform: 'capitalize',
                 display: 'inline-block',
@@ -26,6 +31,7 @@ const order = ( props ) => {
             key={ig.name}>{ig.name} ({ig.amount})</span>;
     });
 
+    {/* return JSX with Ingredients */}
     return (
         <div className={classes.Order}>
             <p>Ingredients: {ingredientOutput}</p>
